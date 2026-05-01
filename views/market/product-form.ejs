@@ -1,0 +1,38 @@
+<%- include('../partials/header', { title: product.id ? 'Edit Product' : 'Add Product' }) %>
+<div class="container mt-5" style="max-width: 600px;">
+  <h2 class="mb-4"><%= product.id ? 'Edit Product' : 'Add New Product' %></h2>
+  <form action="<%= action %>" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label>Title</label>
+      <input type="text" name="title" class="form-control" value="<%= product.title || '' %>" required>
+    </div>
+    <div class="mb-3">
+      <label>Stock Quantity</label>
+      <input type="number" name="stock" class="form-control" value="<%= product.stock || '' %>" min="0" required>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <label>Normal Price (TL)</label>
+        <input type="number" step="0.01" name="normal_price" class="form-control" value="<%= product.normal_price || '' %>" min="0" required>
+      </div>
+      <div class="col">
+        <label>Discounted Price (TL)</label>
+        <input type="number" step="0.01" name="discounted_price" class="form-control" value="<%= product.discounted_price || '' %>" min="0" required>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label>Expiration Date</label>
+      <input type="date" name="expiration_date" class="form-control" value="<%= product.expiration_date || '' %>" required>
+    </div>
+    <div class="mb-3">
+      <label>Product Image</label>
+      <input type="file" name="image" class="form-control" accept="image/*" <%= product.id ? '' : 'required' %>>
+      <% if (product.image_filename) { %>
+        <small class="text-muted">Current image: <%= product.image_filename %></small>
+      <% } %>
+    </div>
+    <button type="submit" class="btn btn-primary w-100"><%= product.id ? 'Update Product' : 'Save Product' %></button>
+    <a href="/market/dashboard" class="btn btn-secondary w-100 mt-2">Cancel</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>
