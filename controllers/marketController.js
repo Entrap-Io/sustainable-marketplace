@@ -14,7 +14,7 @@ export const upload = multer({ storage });
 export const dashboard = async (req, res) => {
   try {
     const [products] = await db.query(
-      "SELECT *, (expiration_date < CURDATE()) AS is_expired FROM products WHERE market_id = ? ORDER BY id DESC",
+      "SELECT *, (expiration_date < CURDATE()) AS is_expired, DATEDIFF(expiration_date, CURDATE()) AS days_left FROM products WHERE market_id = ? ORDER BY id DESC",
       [req.session.user.id]
     );
     res.render("market/dashboard", { products });
