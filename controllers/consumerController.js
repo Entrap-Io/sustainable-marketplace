@@ -15,12 +15,9 @@ export const dashboard = async (req, res) => {
       SELECT p.*, u.district as market_district, u.name as market_name, DATEDIFF(p.expiration_date, CURDATE()) AS days_left
       FROM products p
       JOIN users u ON p.market_id = u.id
-      WHERE u.city = ? AND p.expiration_date >= CURDATE() AND p.stock > 0 ${selectedDistrict !== "ALL" ? "AND u.district = ?" : ""}
+      WHERE u.city = ? AND u.district = ? AND p.expiration_date >= CURDATE() AND p.stock > 0
     `;
-    let queryParams = [userCity];
-    if (selectedDistrict !== "ALL") {
-      queryParams.push(selectedDistrict);
-    }
+    let queryParams = [userCity, userDistrict];
 
     if (keyword) {
       query += ` AND p.title LIKE ?`;
