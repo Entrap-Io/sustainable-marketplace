@@ -11,7 +11,7 @@ export const dashboard = async (req, res) => {
     const userDistrict = req.session.user.district;
 
     let query = `
-      SELECT p.*, u.district as market_district, u.name as market_name 
+      SELECT p.*, u.district as market_district, u.name as market_name, DATEDIFF(p.expiration_date, CURDATE()) AS days_left
       FROM products p
       JOIN users u ON p.market_id = u.id
       WHERE u.city = ? AND p.expiration_date >= CURDATE() AND p.stock > 0
