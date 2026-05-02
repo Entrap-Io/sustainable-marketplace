@@ -29,6 +29,13 @@
                 <strong class="text-success fs-5 ms-2"><%= product.discounted_price %> TL</strong>
               </p>
               <p class="card-text small mb-2 text-danger">Expires: <%= new Date(product.expiration_date).toLocaleDateString() %></p>
+              <p class="card-text small text-warning">
+                <% if (product.days_left > 0) { %>
+                  <strong><%= product.days_left %> days left</strong>
+                <% } else { %>
+                  <strong>Expires today</strong>
+                <% } %>
+              </p>
             </div>
             <div class="card-footer bg-transparent p-2">
               <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" data-id="<%= product.id %>">Add to Cart</button>
