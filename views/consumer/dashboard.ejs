@@ -12,6 +12,13 @@
   <form action="/consumer/dashboard" method="GET" class="mb-4">
     <div class="input-group">
       <input type="text" name="keyword" class="form-control" placeholder="Search by product title..." value="<%= keyword %>">
+      <!-- Filtering the district -->
+      <select name="district" class="form-select">
+         <option value="ALL" <%= selectedDistrict === 'ALL' ? 'selected' : '' %>>All Districts</option>
+         <option value="Bilkent" <%= selectedDistrict === 'Bilkent' ? 'selected' : '' %>>Bilkent</option>
+         <option value="Cankaya" <%= selectedDistrict === 'Cankaya' ? 'selected' : '' %>>Cankaya</option>
+      </select>
+      </div>
       <button type="submit" class="btn btn-primary">Search</button>
       <a href="/consumer/dashboard" class="btn btn-outline-secondary">Clear</a>
     </div>
