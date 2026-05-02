@@ -21,6 +21,19 @@
               <% if (product.is_expired) { %>
                 <span class="badge bg-danger mb-2">EXPIRED</span>
               <% } %>
+              <p class="card-text small text-warning">
+                <% if (!product.is_expired) { %>
+                  <%= product.days_left %> days left
+                <% } else { %>
+                  Expired
+                <% } %>
+              </p>
+
+              <%
+                const discountPercent = Math.round(((product.normal_price - product.discounted_price) / product.normal_price) * 100);
+               %>
+
+              <span class="badge bg-success">-<%= discountPercent %>%</span>
               <p class="card-text">
                 <strong>Stock:</strong> <%= product.stock %><br>
                 <strong>Price:</strong> <del><%= product.normal_price %> TL</del> <span class="text-success fw-bold"><%= product.discounted_price %> TL</span><br>
