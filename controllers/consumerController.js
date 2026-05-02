@@ -50,7 +50,7 @@ export const dashboard = async (req, res) => {
     const totalItems = countResult[0].total;
     const totalPages = Math.ceil(totalItems / limit);
 
-    res.render("consumer/dashboard", { products, keyword, page, totalPages });
+    res.render("consumer/dashboard", { products, keyword, page, totalPages, selectedDistrict });
   } catch (err) {
     console.error(err);
     res.send("Server Error");
