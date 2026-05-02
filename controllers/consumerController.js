@@ -58,7 +58,7 @@ export const dashboard = async (req, res) => {
 };
 
 export const showProfile = (req, res) => {
-  res.render("market/profile", { data: req.session.user, message: req.query.message });
+  res.render("consumer/profile", { data: req.session.user, message: req.query.message });
 };
 
 export const updateProfile = async (req, res) => {
