@@ -21,6 +21,7 @@
               <% if (product.is_expired) { %>
                 <span class="badge bg-danger mb-2">EXPIRED</span>
               <% } %>
+
               <p class="card-text small text-warning">
                 <% if (!product.is_expired) { %>
                   <%= product.days_left %> days left
@@ -34,14 +35,17 @@
                %>
 
               <span class="badge bg-success">-<%= discountPercent %>%</span>
+
               <p class="card-text">
                 <strong>Stock:</strong> <%= product.stock %><br>
                 <strong>Price:</strong> <del><%= product.normal_price %> TL</del> <span class="text-success fw-bold"><%= product.discounted_price %> TL</span><br>
                 <strong>Expires:</strong> <%= new Date(product.expiration_date).toLocaleDateString() %>
               </p>
             </div>
+
             <div class="card-footer bg-transparent">
               <a href="/market/product/edit/<%= product.id %>" class="btn btn-primary btn-sm">Edit</a>
+
               <form action="/market/product/delete/<%= product.id %>" method="POST" class="d-inline">
                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
               </form>
