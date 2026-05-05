@@ -21,7 +21,8 @@ async function getTransporter() {
 }
 
 export const showLogin = (req, res) => {
-  res.render("login", { errors: {}, data: {}, message: req.query.message });
+  res.render("login", { errors: {},
+                       data: {}, message: req.query.message });
 };
 
 export const processLogin = async (req, res) => {
@@ -35,15 +36,19 @@ export const processLogin = async (req, res) => {
         if (!user.is_verified) {
           return res.redirect(`/auth/verify?email=${email}`);
         }
-        req.session.user = { id: user.id, name: user.name, role: user.role, city: user.city, district: user.district };
+        req.session.user = { id: user.id, 
+                            name: user.name, role: user.role, 
+                            city: user.city, district: user.district };
         req.session.isAuthenticated = true;
         return res.redirect(user.role === 'market' ? "/market/dashboard" : "/consumer/dashboard");
       }
     }
-    res.render("login", { errors: { email: { msg: "Invalid email or password" } }, data: req.body, message: null });
+    res.render("login", { errors: { email: { msg: "Invalid email or password" } }, 
+                         data: req.body, message: null });
   } catch (err) {
     console.error(err);
-    res.render("login", { errors: { email: { msg: "Server error" } }, data: req.body, message: null });
+    res.render("login", { errors: { email: { msg: "Server error" } }, 
+                         data: req.body, message: null });
   }
 };
 
@@ -54,7 +59,8 @@ export const showRegister = (req, res) => {
 export const processRegister = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.render("register", { errors: errors.mapped(), data: req.body });
+    return res.render("register", { errors: errors.mapped(), 
+                                   data: req.body });
   }
 
   const { email, password, role, name, city, district } = req.body;
@@ -63,7 +69,8 @@ export const processRegister = async (req, res) => {
     // Check if exists
     const [existing] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
     if (existing.length > 0) {
-      return res.render("register", { errors: { email: { msg: "Email already in use" } }, data: req.body });
+      return res.render("register", { errors: { email: { msg: "Email already in use" } }, 
+                                     data: req.body });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -92,7 +99,8 @@ export const processRegister = async (req, res) => {
     res.redirect(`/auth/verify?email=${email}`);
   } catch (err) {
     console.error(err);
-    res.render("register", { errors: { email: { msg: "Server error" } }, data: req.body });
+    res.render("register", { errors: { email: { msg: "Server error" } }, 
+                            data: req.body });
   }
 };
 
