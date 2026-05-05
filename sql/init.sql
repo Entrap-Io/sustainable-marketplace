@@ -98,11 +98,22 @@ INSERT INTO products (title, stock, normal_price, discounted_price, expiration_d
 ('Tomato 1kg', 30, 40.00, 20.00, DATE_SUB(CURDATE(), INTERVAL 12 DAY), 'tomato.jpg', 3),
 ('Cucumber 1kg', 70, 35.00, 18.00, DATE_SUB(CURDATE(), INTERVAL 8 DAY), 'cucumber.jpg', 3),
 ('Orange Juice 1L', 45, 80.00, 55.00, DATE_SUB(CURDATE(), INTERVAL 8 DAY), 'orangejuice.jpg', 3),
-('Eggs (12 Pack)', 50, 110.00,75.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'eggs.jpg', 3);
+('Eggs (12 Pack)', 50, 110.00,75.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'eggs.jpg', 3),
+('Mustard', 35, 70.00, 30.00, DATE_SUB(CURDATE(), INTERVAL 25 DAY), 'mustard.jpg', 4),
+('Olive Oil',60, 250.00, 130.00, DATE_SUB(CURDATE(), INTERVAL 3 MONTH), 'oliveoil.jpg', 4),
+('Sunscreen', 90, 500.00, 280.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'sunscreen.jpg', 4),
+('Soap', 100, 75.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 6 MONTH), 'soap.jpg', 4),
+('Toothpaste', 60 , 120.00, 75.00, DATE_SUB(CURDATE(), INTERVAL 20 DAY), 'toothpaste.jpg', 4);
+  
 
 -- Products for (market user has id=4) Target 
 INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
 ('Nutella', 30, 200.00, 120.00, DATE_SUB(CURDATE(), INTERVAL 25 DAY), 'nutella.jpg', 4),
 ('Toast Bread', 60, 65.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'toast.jpg', 4),
 ('Yoghurt', 25, 60.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'yoghurt.jpg', 4),
-('Ketchup', 80, 70.00, 35.00, DATE_SUB(CURDATE(), INTERVAL 2 MONTH), 'ketchup.jpg', 4);
+('Ketchup', 80, 70.00, 35.00, DATE_SUB(CURDATE(), INTERVAL 2 MONTH), 'ketchup.jpg', 4),
+('Frozen Pizza', 100, 220.00, 180.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'pizza.jpg', 4),
+('Meat', 25, 800.00, 650.00, DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'meat.jpg', 4),
+('Ranch', 100, 65.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'ranch.jpg', 4),
+('Cilantro', 40, 30.00, 18.00, DATE_SUB(CURDATE(), INTERVAL 7 DAY), 'cilantro.jpg', 4),
+('Eggplant', 50, 80.00, 55.00, DATE_SUB(CURDATE(), INTERVAL 9 DAY), 'eggplant.jpg', 4);
