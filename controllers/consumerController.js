@@ -14,7 +14,6 @@ export const dashboard = async (req, res) => {
     const selectedDistrict = req.query.district || "ALL";
     const userDistrict = req.session.user.district;
     console.log(userDistrict);
-    
 
     let query = `
       SELECT p.*, u.district as market_district, u.name as market_name, DATEDIFF(p.expiration_date, CURDATE()) AS days_left
@@ -29,7 +28,8 @@ export const dashboard = async (req, res) => {
       queryParams.push(`%${keyword}%`);
     }
 
-    query += ` ORDER BY (u.district = ?) DESC, p.id DESC LIMIT ? OFFSET ?`;
+    query += ` ORDER BY (u.district = ?) DESC, 
+    p.id DESC LIMIT ? OFFSET ?`;
     queryParams.push(userDistrict, limit, offset);
 
     const [products] = await db.query(query, queryParams);
@@ -38,7 +38,8 @@ export const dashboard = async (req, res) => {
       SELECT COUNT(*) as total 
       FROM products p
       JOIN users u ON p.market_id = u.id
-      WHERE u.district = ? AND p.expiration_date >= CURDATE() AND p.stock > 0 ${selectedDistrict !== "ALL" ? "AND u.district = ?" : ""}
+      WHERE u.district = ? AND p.expiration_date >= CURDATE() 
+      AND p.stock > 0 ${selectedDistrict !== "ALL" ? "AND u.district = ?" : ""}
     `;
     let countParams = [userCity];
     if (selectedDistrict !== "ALL") {
