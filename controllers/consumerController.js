@@ -12,10 +12,14 @@ export const dashboard = async (req, res) => {
     const userDistrict = req.session.user.district;
 
     let query = `
-      SELECT p.*, u.district as market_district, u.name as market_name, DATEDIFF(p.expiration_date, CURDATE()) AS days_left
+      SELECT p.*, u.district as market_district, 
+      u.name as market_name, 
+      DATEDIFF(p.expiration_date, CURDATE()) AS days_left
       FROM products p
       JOIN users u ON p.market_id = u.id
-      WHERE u.city = ? AND u.district = ? AND p.expiration_date >= CURDATE() AND p.stock > 0
+      WHERE u.city = ? 
+      AND u.district = ? 
+      AND p.expiration_date >= CURDATE() AND p.stock > 0
     `;
     let queryParams = [userCity, userDistrict];
 
@@ -33,7 +37,9 @@ export const dashboard = async (req, res) => {
       SELECT COUNT(*) as total 
       FROM products p
       JOIN users u ON p.market_id = u.id
-      WHERE u.city = ? AND p.expiration_date >= CURDATE() AND p.stock > 0 ${selectedDistrict !== "ALL" ? "AND u.district = ?" : ""}
+      WHERE u.city = ? 
+      AND p.expiration_date >= CURDATE() 
+      AND p.stock > 0 ${selectedDistrict !== "ALL" ? "AND u.district = ?" : ""}
     `;
     let countParams = [userCity];
     if (selectedDistrict !== "ALL") {
@@ -61,7 +67,8 @@ export const showProfile = (req, res) => {
 export const updateProfile = async (req, res) => {
   const { name, city, district } = req.body;
   try {
-    await db.query("UPDATE users SET name=?, city=?, district=? WHERE id=?", [name, city, district, req.session.user.id]);
+    await db.query("UPDATE users 
+                   SET name=?, city=?, district=? WHERE id=?", [name, city, district, req.session.user.id]);
     req.session.user.name = name;
     req.session.user.city = city;
     req.session.user.district = district;
