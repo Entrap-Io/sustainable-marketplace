@@ -4,10 +4,12 @@
   
   <div class="row">
     <div class="col-md-8">
+
       <% if (cartItems.length === 0) { %>
         <div class="alert alert-info">Your cart is empty.</div>
       <% } else { %>
         <div class="list-group" id="cart-list">
+
           <% cartItems.forEach(item => { %>
             <div class="list-group-item d-flex justify-content-between align-items-center cart-item" data-id="<%= item.cart_id %>" data-price="<%= item.discounted_price %>">
               <div class="d-flex align-items-center">
@@ -22,6 +24,7 @@
                 <span class="mx-2 item-quantity"><%= item.quantity %></span>
                 <button class="btn btn-sm btn-outline-secondary cart-action" data-action="increase">+</button>
                 <span class="mx-3 fw-bold item-total text-success" style="min-width: 80px;"><%= (item.discounted_price * item.quantity).toFixed(2) %> TL</span>
+
                 <button class="btn btn-sm btn-danger cart-action" data-action="remove">Remove</button>
               </div>
             </div>
@@ -39,6 +42,7 @@
             <span class="fw-bold">Grand Total:</span>
             <strong id="grand-total" class="fs-4 text-success">0.00 TL</strong>
           </div>
+
           <button id="purchase-btn" class="btn btn-success w-100 p-2 fw-bold" <%= cartItems.length === 0 ? 'disabled' : '' %>>PURCHASE</button>
         </div>
       </div>
@@ -50,6 +54,7 @@
   <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body" id="toast-msg">Cart updated!</div>
+
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
@@ -64,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateGrandTotal() {
     let total = 0;
     let count = 0;
+
     document.querySelectorAll(".cart-item").forEach(el => {
       const price = parseFloat(el.getAttribute("data-price"));
       const qty = parseInt(el.querySelector(".item-quantity").innerText);
