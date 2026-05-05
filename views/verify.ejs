@@ -1,18 +1,23 @@
 <%- include('partials/header', { title: 'Verify Email' }) %>
 <div class="container mt-5" style="max-width: 400px;">
   <h2 class="mb-4 text-center">Verify Email</h2>
+
   <% if (error) { %> <div class="alert alert-danger"><%= error %></div> <% } %>
   <p class="text-muted text-center">Check the server console for the Ethereal email link containing your 6-digit code.</p>
+
   <form action="/auth/verify" method="POST">
     <div class="mb-3">
       <label>Email</label>
       <input type="email" name="email" class="form-control" value="<%= email %>" readonly>
     </div>
+
     <div class="mb-3">
       <label>6-Digit Code</label>
       <input type="text" name="code" class="form-control" required>
     </div>
+
     <button type="submit" class="btn btn-primary w-100">Verify</button>
   </form>
 </div>
+
 <%- include('partials/footer') %>
