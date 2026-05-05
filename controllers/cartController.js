@@ -2,7 +2,8 @@ import db from "../db.js";
 
 export const getCartCount = async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT SUM(quantity) as count FROM cart_items WHERE user_id=?", [req.session.user.id]);
+    const [rows] = await db.query("SELECT SUM(quantity) as count
+                                  FROM cart_items WHERE user_id=?", [req.session.user.id]);
     res.json({ count: rows[0].count || 0 });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
@@ -13,10 +14,13 @@ export const addToCart = async (req, res) => {
   const { product_id } = req.body;
   try {
     const [rows] = await db.query("SELECT id,
-                                  quantity FROM cart_items WHERE user_id=? AND product_id=?", 
+                                  quantity FROM cart_items 
+      WHERE user_id=? AND product_id=?", 
       [req.session.user.id, product_id]);
     if (rows.length > 0) {
-      await db.query("UPDATE cart_items SET quantity = quantity + 1 WHERE id=?", [rows[0].id]);
+      await db.query("UPDATE cart_items 
+                     SET quantity = quantity + 1 
+        WHERE id=?", [rows[0].id]);
     } else {
       await db.query("INSERT INTO cart_items 
                      (user_id, product_id, quantity) VALUES (?, ?, 1)", 
