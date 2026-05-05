@@ -3,42 +3,52 @@
   <h2 class="mb-4 text-center">Register</h2>
   <form action="/auth/register" method="POST">
     <div class="mb-3">
+
       <label>Role</label>
       <select name="role" class="form-select <%= errors.role ? 'is-invalid' : '' %>">
         <option value="consumer" <%= data?.role === 'consumer' ? 'selected' : '' %>>Consumer</option>
         <option value="market" <%= data?.role === 'market' ? 'selected' : '' %>>Market User</option>
       </select>
+
       <% if(errors.role) { %><div class="invalid-feedback"><%= errors.role.msg %></div><% } %>
     </div>
     <div class="mb-3">
+
       <label>Full Name / Market Name</label>
       <input type="text" name="name" class="form-control <%= errors.name ? 'is-invalid' : '' %>" value="<%= data?.name ?? '' %>">
+
       <% if(errors.name) { %><div class="invalid-feedback"><%= errors.name.msg %></div><% } %>
     </div>
     <div class="mb-3">
       <label>Email</label>
       <input type="email" name="email" class="form-control <%= errors.email ? 'is-invalid' : '' %>" value="<%= data?.email ?? '' %>">
+
       <% if(errors.email) { %><div class="invalid-feedback"><%= errors.email.msg %></div><% } %>
     </div>
     <div class="mb-3">
       <label>Password</label>
       <input type="password" name="password" class="form-control <%= errors.password ? 'is-invalid' : '' %>">
+
       <% if(errors.password) { %><div class="invalid-feedback"><%= errors.password.msg %></div><% } %>
     </div>
     <div class="row mb-3">
       <div class="col">
         <label>City</label>
         <input type="text" name="city" class="form-control <%= errors.city ? 'is-invalid' : '' %>" value="<%= data?.city ?? '' %>">
+
         <% if(errors.city) { %><div class="invalid-feedback"><%= errors.city.msg %></div><% } %>
       </div>
       <div class="col">
         <label>District</label>
         <input type="text" name="district" class="form-control <%= errors.district ? 'is-invalid' : '' %>" value="<%= data?.district ?? '' %>">
+
         <% if(errors.district) { %><div class="invalid-feedback"><%= errors.district.msg %></div><% } %>
       </div>
     </div>
+
     <button type="submit" class="btn btn-primary w-100">Register</button>
   </form>
   <p class="mt-3 text-center">Already have an account? <a href="/auth/login">Login</a></p>
 </div>
+
 <%- include('partials/footer') %>
