@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 import { validationResult } from "express-validator";
 
 let transporter;
+
 async function getTransporter() {
   if (transporter) return transporter;
   let testAccount = await nodemailer.createTestAccount();
