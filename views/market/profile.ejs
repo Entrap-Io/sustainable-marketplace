@@ -3,21 +3,25 @@
   <h2 class="mb-4">Profile Settings</h2>
   <% if (message) { %> <div class="alert alert-success"><%= message %></div> <% } %>
   <form action="/market/profile" method="POST">
+
     <div class="mb-3">
       <label>Market Name / Full Name</label>
       <input type="text" name="name" class="form-control" value="<%= data.name || '' %>" required>
     </div>
+
     <div class="row mb-3">
       <div class="col">
         <label>City</label>
         <input type="text" name="city" class="form-control" value="<%= data.city || '' %>" required>
       </div>
+
       <div class="col">
         <label>District</label>
         <input type="text" name="district" class="form-control" value="<%= data.district || '' %>" required>
       </div>
     </div>
     <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+
     <a href="javascript:history.back()" class="btn btn-secondary w-100 mt-2">Back</a>
   </form>
 </div>
