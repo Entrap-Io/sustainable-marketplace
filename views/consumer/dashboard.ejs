@@ -1,0 +1,120 @@
+<%- include('../partials/header', { title: 'Consumer Dashboard' }) %>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2> Search Products in <%= user.city %> 
+      <% if (selectedDistrict !== 'ALL') { %> 
+        - <%= selectedDistrict %>
+      <% } %>
+    </h2>
+    <a href="/consumer/profile" class="btn btn-secondary">Profile Settings</a>
+  </div>
+
+  <form action="/consumer/dashboard" method="GET" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="keyword" class="form-control" placeholder="Search by product title..." value="<%= keyword %>">
+      <div class="alert alert-info">
+        Showing products in <strong><%= user.city %> / <%= user.district %></strong>
+      </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a href="/consumer/dashboard" class="btn btn-outline-secondary">Clear</a>
+    </div>
+  </form>
+
+  <div class="row">
+    <% if (products.length === 0) { %>
+      <div class="col-12"><div class="alert alert-info">No products found.</div></div>
+    <% } else { %>
+      <% products.forEach(product => { %>
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow-sm">
+            <img src="/uploads/<%= product.image_filename %>" class="card-img-top" alt="<%= product.title %>" style="height: 150px; object-fit: cover;">
+            <div class="card-body">
+              <h6 class="card-title"><%= product.title %></h6>
+              <p class="card-text small text-muted mb-1"><i class="bi bi-shop"></i> <%= product.market_name %> (<%= product.market_district %>)</p>
+              <%
+                const discountPercent = Math.round(
+                   ((product.normal_price - product.discounted_price) / product.normal_price) * 100
+                );
+              %>
+              <p class="card-text mb-2">
+                <del class="text-muted"><%= product.normal_price %> TL</del> 
+                <strong class="text-success fs-5 ms-2"><%= product.discounted_price %> TL</strong>
+              </p>
+              <span class="badge bg-success">
+                 -<%= discountPercent %>%
+              </span>
+              <p class="card-text small mb-2 text-danger">Expires: <%= new Date(product.expiration_date).toLocaleDateString() %></p>
+              <p class="card-text small text-warning">
+                <% if (product.days_left > 0) { %>
+                  <strong><%= product.days_left %> days left</strong>
+                <% } else { %>
+                  <strong>Expires today</strong>
+                <% } %>
+              </p>
+            </div>
+            <div class="card-footer bg-transparent p-2">
+              <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" data-id="<%= product.id %>">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <% if (totalPages > 1) { %>
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <% for(let i=1; i<=totalPages; i++) { %>
+          <li class="page-item <%= page === i ? 'active' : '' %>">
+            <a class="page-link" href="/consumer/dashboard?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  <% } %>
+  
+</div>
+
+<!-- Toast for Add to Cart -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Added to cart successfully!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/cart/count").then(r => r.json()).then(data => {
+    document.getElementById("cart-count").innerText = data.count > 0 ? data.count : "";
+  });
+
+  const toastEl = document.getElementById("cartToast");
+  const toast = new bootstrap.Toast(toastEl);
+
+  document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const productId = btn.getAttribute("data-id");
+      fetch("/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product_id: productId })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          toast.show();
+          let countEl = document.getElementById("cart-count");
+          let currentCount = parseInt(countEl.innerText || 0);
+          countEl.innerText = currentCount + 1;
+        }
+      });
+    });
+  });
+});
+</script>
+
+<%- include('../partials/footer') %>

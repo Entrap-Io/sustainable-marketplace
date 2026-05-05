@@ -1,0 +1,40 @@
+<%- include('../partials/header', { title: 'Profile Settings' }) %>
+
+<div class="container mt-5" style="max-width: 500px;">
+  <h2 class="mb-4">Profile Settings</h2>
+
+  <% if (message) { %>
+    <div class="alert alert-success"><%= message %></div>
+  <% } %>
+
+  <form action="/consumer/profile" method="POST">
+    
+    <div class="mb-3">
+      <label>Full Name</label>
+      <input type="text" name="name" class="form-control" value="<%= data.name %>" required>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col">
+        <label>City</label>
+        <select name="city" class="form-select" required>
+          <option value="Ankara" <%= data.city === 'Ankara' ? 'selected' : '' %>>Ankara</option>
+        </select>
+      </div>
+
+      <div class="col">
+        <label>District</label>
+        <select name="district" class="form-select" required>
+          <option value="Bilkent" <%= data.district === 'Bilkent' ? 'selected' : '' %>>Bilkent</option>
+          <option value="Cankaya" <%= data.district === 'Cankaya' ? 'selected' : '' %>>Cankaya</option>
+          <option value="Kadikoy" <%= data.district === 'Kadikoy' ? 'selected' : '' %>>Kadikoy</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+    <a href="/consumer/dashboard" class="btn btn-secondary w-100 mt-2">Back</a>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>
