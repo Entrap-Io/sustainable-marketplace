@@ -25,6 +25,7 @@
 
       <div class="col">
         <label>District</label>
+
         <select name="district" class="form-select" required>
           <option value="Bilkent" <%= data.district === 'Bilkent' ? 'selected' : '' %>>Bilkent</option>
           <option value="Cankaya" <%= data.district === 'Cankaya' ? 'selected' : '' %>>Cankaya</option>
@@ -34,6 +35,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+
     <a href="/consumer/dashboard" class="btn btn-secondary w-100 mt-2">Back</a>
   </form>
 </div>
