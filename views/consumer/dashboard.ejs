@@ -37,6 +37,7 @@
                    ((product.normal_price - product.discounted_price) / product.normal_price) * 100
                 );
               %>
+
               <p class="card-text mb-2">
                 <del class="text-muted"><%= product.normal_price %> TL</del> 
                 <strong class="text-success fs-5 ms-2"><%= product.discounted_price %> TL</strong>
@@ -44,6 +45,7 @@
               <span class="badge bg-success">
                  -<%= discountPercent %>%
               </span>
+
               <p class="card-text small mb-2 text-danger">Expires: <%= new Date(product.expiration_date).toLocaleDateString() %></p>
               <p class="card-text small text-warning">
                 <% if (product.days_left > 0) { %>
@@ -97,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const productId = btn.getAttribute("data-id");
+
       fetch("/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
