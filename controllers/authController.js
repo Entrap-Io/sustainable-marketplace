@@ -27,13 +27,16 @@ export const processLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    
     if (rows.length > 0) {
       const user = rows[0];
       const match = await bcrypt.compare(password, user.password);
+
       if (match) {
         if (!user.is_verified) {
           return res.redirect(`/auth/verify?email=${email}`);
         }
+        
         req.session.user = { id: user.id, name: user.name, role: user.role, city: user.city, district: user.district };
         req.session.isAuthenticated = true;
         return res.redirect(user.role === 'market' ? "/market/dashboard" : "/consumer/dashboard");
@@ -52,6 +55,7 @@ export const showRegister = (req, res) => {
 
 export const processRegister = async (req, res) => {
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
     return res.render("register", { errors: errors.mapped(), data: req.body });
   }
@@ -61,6 +65,7 @@ export const processRegister = async (req, res) => {
   try {
     // Check if exists
     const [existing] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    
     if (existing.length > 0) {
       return res.render("register", { errors: { email: { msg: "Email already in use" } }, data: req.body });
     }
@@ -102,8 +107,10 @@ export const showVerify = (req, res) => {
 
 export const processVerify = async (req, res) => {
   const { email, code } = req.body;
+  
   try {
     const [rows] = await db.query("SELECT * FROM users WHERE email = ? AND verification_code = ?", [email, code]);
+    
     if (rows.length > 0) {
       await db.query("UPDATE users SET is_verified = TRUE, verification_code = NULL WHERE email = ?", [email]);
       return res.redirect("/auth/login?message=Account+verified.+Please+login.");
