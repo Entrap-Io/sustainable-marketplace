@@ -5,9 +5,11 @@ import { showLogin, processLogin, showRegister, processRegister, showVerify, pro
 const router = express.Router();
 
 router.get("/login", showLogin);
+
 router.post("/login", processLogin);
 
 router.get("/register", showRegister);
+
 router.post("/register", [
   body("email").isEmail().withMessage("Must be a valid email"),
   body("password").isLength({ min: 4 }).withMessage("Password must be at least 4 chars"),
@@ -18,6 +20,7 @@ router.post("/register", [
 ], processRegister);
 
 router.get("/verify", showVerify);
+
 router.post("/verify", processVerify);
 
 router.get("/logout", logout);
