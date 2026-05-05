@@ -11,6 +11,7 @@ export const getCartCount = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   const { product_id } = req.body;
+  
   try {
     const [rows] = await db.query("SELECT id, quantity FROM cart_items WHERE user_id=? AND product_id=?", [req.session.user.id, product_id]);
     if (rows.length > 0) {
@@ -18,6 +19,7 @@ export const addToCart = async (req, res) => {
     } else {
       await db.query("INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, 1)", [req.session.user.id, product_id]);
     }
+    
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
@@ -41,6 +43,7 @@ export const viewCart = async (req, res) => {
 
 export const updateCart = async (req, res) => {
   const { cart_id, action } = req.body;
+  
   try {
     if (action === 'remove') {
       await db.query("DELETE FROM cart_items WHERE id=? AND user_id=?", [cart_id, req.session.user.id]);
