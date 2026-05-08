@@ -37,8 +37,14 @@ export const dashboard = async (req, res) => {
       queryParams.push(`%${keyword}%`);
     }
 
-    query += ` ORDER BY ${orderBy} LIMIT ? OFFSET ?`;
-    queryParams.push(limit, offset);
+    // Prioritize district only when searching (keyword present) and in "Whole City" scope
+    if (keyword && scope === "city") {
+      query += ` ORDER BY (u.district = ?) DESC, ${orderBy} LIMIT ? OFFSET ?`;
+      queryParams.push(userDistrict, limit, offset);
+    } else {
+      query += ` ORDER BY ${orderBy} LIMIT ? OFFSET ?`;
+      queryParams.push(limit, offset);
+    }
 
     const [products] = await db.query(query, queryParams);
 

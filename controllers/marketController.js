@@ -1,8 +1,11 @@
 import db from "../db.js";
 import multer from "multer";
 import path from "path";
+import { validationResult } from "express-validator";
 
 const storage = multer.diskStorage({
+// ... existing storage logic ...
+// (I will replace the whole file content or chunks carefully)
   destination: (req, file, cb) => cb(null, "public/uploads/"),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -57,12 +60,20 @@ export const updateProfile = async (req, res) => {
 };
 
 export const showAddProduct = (req, res) => {
-  res.render("market/product-form", { product: {}, action: "/market/product/add" });
+  res.render("market/product-form", { product: {}, action: "/market/product/add", errors: {} });
 };
 
 export const addProduct = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("market/product-form", { 
+      product: req.body, 
+      action: "/market/product/add", 
+      errors: errors.mapped() 
+    });
+  }
+
   const { title, stock, normal_price, discounted_price, expiration_date } = req.body;
-  
   const image_filename = req.file ? req.file.filename : 'default.png';
 
   try {
@@ -84,11 +95,15 @@ export const showEditProduct = async (req, res) => {
                                   AND market_id=?`, [req.params.id, req.session.user.id]);
     if (rows.length === 0) return res.redirect("/market/dashboard");
     
-    // Format date for the HTML input[type="date"]
+    // Format date for the HTML input[type="date"] manually to avoid timezone shifts
     const p = rows[0];
-    p.expiration_date = p.expiration_date.toISOString().split('T')[0];
+    const dateObj = new Date(p.expiration_date);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    p.expiration_date = `${year}-${month}-${day}`;
     
-    res.render("market/product-form", { product: p, action: `/market/product/edit/${p.id}` });
+    res.render("market/product-form", { product: p, action: `/market/product/edit/${p.id}`, errors: {} });
   } catch (err) {
     console.error(err);
     res.send("Server Error");
@@ -96,6 +111,15 @@ export const showEditProduct = async (req, res) => {
 };
 
 export const editProduct = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("market/product-form", { 
+      product: { ...req.body, id: req.params.id }, 
+      action: `/market/product/edit/${req.params.id}`, 
+      errors: errors.mapped() 
+    });
+  }
+
   const { title, stock, normal_price, discounted_price, expiration_date } = req.body;
   
   try {
