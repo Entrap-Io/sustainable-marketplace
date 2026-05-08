@@ -25,48 +25,32 @@ We used the **Model-View-Controller** pattern so we can work together without br
 
 ---
 
-## Full Project Map
-
+## Full Project Map (The Blueprint)
 ```text
 .
 ├── controllers/
-│   ├── authController.js      # Logic for login, register, and email verification
-│   ├── authMiddleware.js      # Protects routes based on role (Consumer vs Market)
-│   ├── cartController.js      # Logic for the AJAX shopping cart
-│   ├── consumerController.js   # Logic for search and consumer profiles
-│   └── marketController.js     # Logic for product CRUD and uploads
+│   ├── authController.js      # Register, Login, & 6-digit verification logic
+│   ├── authMiddleware.js      # Role-based security (Consumer vs Market)
+│   ├── cartController.js      # The Smart AJAX Cart & Purchase logic
+│   ├── consumerController.js   # Search engine + Location prioritization
+│   └── marketController.js     # Inventory CRUD + Auto Image Cleanup
 ├── routes/
-│   ├── authRoutes.js          # URLs for /auth (login, logout, register)
-│   ├── cartRoutes.js          # URLs for /cart (add, update, purchase)
-│   ├── consumerRoutes.js      # URLs for /consumer (search, profile)
-│   └── marketRoutes.js        # URLs for /market (dashboard, products)
+│   ├── authRoutes.js          # Authentication endpoints
+│   ├── cartRoutes.js          # AJAX Cart endpoints
+│   ├── consumerRoutes.js      # Search & Profile endpoints
+│   └── marketRoutes.js        # Dashboard & Product endpoints
 ├── views/
-│   ├── consumer/
-│   │   ├── cart.ejs           # Shopping cart page
-│   │   └── dashboard.ejs      # Product search page
-│   ├── market/
-│   │   ├── dashboard.ejs      # Product management page
-│   │   ├── product-form.ejs   # Add/Edit product form
-│   │   └── profile.ejs        # Market profile settings
-│   ├── partials/
-│   │   ├── footer.ejs         # Reusable footer
-│   │   └── header.ejs         # Reusable navbar
-│   ├── login.ejs              # Auth: Login page
-│   ├── register.ejs           # Auth: Register page
-│   └── verify.ejs             # Auth: Email verification page
+│   ├── consumer/              # Consumer-facing dashboard & cart
+│   ├── market/                # Merchant inventory tools
+│   ├── partials/              # Reusable UI components
+│   └── *.ejs                  # Auth & Verification views
 ├── public/
-│   ├── css/
-│   │   └── style.css          # Custom styling
-│   └── uploads/               # Where product images are stored
-├── sql/
-│   └── init.sql               # Database setup and test data script
-├── .env                       # Environment variables (Secrets)
-├── .gitignore                 # Files to ignore on GitHub
-├── db.js                      # Database connection pool
-├── docker-compose.yml         # Container configuration
-├── package.json               # Dependencies and scripts
-├── README.md                  # This file
-└── server.js                  # Main entry point
+│   ├── css/style.css          # Premium design system
+│   └── uploads/               # Product images (Auto-managed)
+├── sql/init.sql               # DB Schema & Meaningful seed data
+├── .env                       # The Config
+├── docker-compose.yml         # The Environment
+└── server.js                  # The Entry Point
 ```
 
 ---
@@ -93,7 +77,16 @@ SESSION_SECRET=supersecret
 2. **Start DB:** `docker compose up -d`
 3. **Start App:** `npm run dev`
 
-Go to: **http://localhost:3000**
+Open: **http://localhost:3000**
+
+---
+
+## Why us?
+
+- **Search Prioritization**: We don't just search. We prioritize the user's district. Higher relevance = higher conversion.
+- **Smart Cart Adjustment**: If stock changes mid-purchase, the cart adjusts itself. No errors. No frustration. Just clean UX.
+- **Automated Image Cleanup**: When a product is gone, the file is gone. We don't hoard bytes.
+- **Validation-First**: All forms are "Sticky." If a user messes up, we keep their data and show them why. That's how you build trust.
 
 ---
 
