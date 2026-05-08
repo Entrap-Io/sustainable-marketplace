@@ -47,12 +47,12 @@ body {
   letter-spacing: 0.02em;
 }
 
-.price-hero {
+.price {
   color: var(--primary-color);
   font-weight: 700;
 }
 
-.scope-toggle .btn {
+.toggle .btn {
   border-radius: 10px;
   font-weight: 600;
   padding: 0.8rem;
@@ -62,7 +62,7 @@ body {
 }
 
 /* Glassmorphism subtle effect for some containers */
-.glass-panel {
+.panel {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   border-radius: var(--card-border-radius);
@@ -70,7 +70,7 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
-.text-truncate-2 {
+.shortText {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;  
