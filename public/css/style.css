@@ -1,9 +1,9 @@
 :root {
-  --primary-color: #2e7d32; /* Sustainable Green */
-  --secondary-color: #388e3c;
-  --accent-color: #f57c00; /* Orange for alerts */
+ --green: #2e7d32; 
+ --darkGreen: #388e3c;
+ --orange: #f57c00; /* For the alerts */
   --bg-color: #f4f7f6;
-  --card-border-radius: 12px;
+  --radius: 12px;
 }
 
 body {
@@ -18,7 +18,7 @@ body {
 }
 
 .card {
-  border-radius: var(--card-border-radius);
+  border-radius: var(--radius);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
@@ -29,16 +29,16 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  background-color: var(--green);
+  border-color: var(--green);
   border-radius: 8px;
   font-weight: 500;
   padding: 0.6rem 1.2rem;
 }
 
 .btn-primary:hover {
-  background-color: var(--secondary-color);
-  border-color: var(--secondary-color);
+  background-color: var(--darkGreen);
+  border-color: var(--darkGreen);
 }
 
 .badge {
@@ -48,7 +48,7 @@ body {
 }
 
 .price {
-  color: var(--primary-color);
+  color: var(--green);
   font-weight: 700;
 }
 
@@ -65,7 +65,7 @@ body {
 .panel {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
-  border-radius: var(--card-border-radius);
+  border-radius: var(--radius);
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
