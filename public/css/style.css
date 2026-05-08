@@ -1,7 +1,6 @@
 :root {
- --green: #2e7d32; 
- --darkGreen: #388e3c;
- --orange: #f57c00; /* For the alerts */
+  --green: #2e7d32; 
+  --darkGreen: #388e3c;
   --bg-color: #f4f7f6;
   --radius: 12px;
 }
