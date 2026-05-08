@@ -1,118 +1,120 @@
-CREATE DATABASE IF NOT EXISTS test;
-USE test;
+-- MySQL dump 10.13  Distrib 8.0.45, for Linux (aarch64)
+--
+-- Host: localhost    Database: test
+-- ------------------------------------------------------
+-- Server version	8.0.45
 
-CREATE TABLE IF NOT EXISTS users (
-  id INT NOT NULL AUTO_INCREMENT,
-  email VARCHAR(100) NOT NULL UNIQUE,
-  password VARCHAR(100) NOT NULL,
-  role ENUM('market', 'consumer') NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  city VARCHAR(50) NOT NULL,
-  district VARCHAR(50) NOT NULL,
-  verification_code VARCHAR(10),
-  is_verified BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE IF NOT EXISTS products (
-  id INT NOT NULL AUTO_INCREMENT,
-  title VARCHAR(100) NOT NULL,
-  stock INT NOT NULL,
-  normal_price DECIMAL(10, 2) NOT NULL,
-  discounted_price DECIMAL(10, 2) NOT NULL,
-  expiration_date DATE NOT NULL,
-  image_filename VARCHAR(255) NOT NULL,
-  market_id INT NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (market_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Table structure for table `cart_items`
+--
 
-CREATE TABLE IF NOT EXISTS cart_items (
-  id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  product_id INT NOT NULL,
-  quantity INT NOT NULL DEFAULT 1,
-  PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TABLE IF EXISTS `cart_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cart_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `quantity` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Seed Data (Password is '1234' for all test users)
--- Market User: Tok Market
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('tok-market@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'market', 'Tok Market', 'Ankara', 'Bilkent', TRUE);
+--
+-- Dumping data for table `cart_items`
+--
 
--- Market User: Bim Market
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('bim-market@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'market', 'Bim Market', 'Ankara', 'Cankaya', TRUE);
+LOCK TABLES `cart_items` WRITE;
+/*!40000 ALTER TABLE `cart_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cart_items` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Market User: File Market
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('file-market@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'market', 'File Market', 'Ankara', 'Cankaya', TRUE);
+--
+-- Table structure for table `products`
+--
 
--- Market User: Target Market
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('target-market@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'market', 'Target Market', 'Ankara', 'Bilkent', TRUE);
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `stock` int NOT NULL,
+  `normal_price` decimal(10,2) NOT NULL,
+  `discounted_price` decimal(10,2) NOT NULL,
+  `expiration_date` date NOT NULL,
+  `image_filename` varchar(255) NOT NULL,
+  `market_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `market_id` (`market_id`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`market_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `products`
+--
 
--- Consumer User: John Doe
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('consumer@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'consumer', 'John Doe', 'Ankara', 'Bilkent', TRUE);
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (20,'Toblerone 100gr',25,200.00,120.00,'2026-06-05','toblerone.jpg',1),(21,'Magnum Ice Cream',50,45.00,30.00,'2026-05-10','magnum.jpg',1),(22,'Magnolia Cake',8,300.00,180.00,'2026-05-10','magnolia.jpg',1),(23,'Nutmeg Spice',100,50.00,20.00,'2027-05-05','nutmeg.jpg',1),(24,'Milk 1L',5,45.00,30.00,'2026-05-10','milk.jpg',2),(25,'Banana 1kg',40,80.00,60.00,'2026-05-10','banana.jpg',2),(26,'Apple 1kg',60,110.00,80.00,'2026-05-10','apple.jpg',2),(27,'Cheese',15,120.00,85.00,'2026-05-10','cheese.jpg',2),(28,'Tomato 1kg',30,60.00,45.00,'2026-05-10','tomato.jpg',3),(29,'Cucumber 1kg',70,60.00,40.00,'2026-05-12','cucumber.jpg',3),(30,'Orange Juice 1L',45,80.00,55.00,'2026-05-13','orangejuice.jpg',3),(31,'Eggs (12 Pack)',50,150.00,100.00,'2026-05-11','eggs.jpg',3),(32,'Nutella',29,200.00,120.00,'2026-05-31','nutella.jpg',4),(33,'Toast Bread',60,65.00,40.00,'2026-05-13','toast.jpg',4),(34,'Yoghurt',24,60.00,40.00,'2026-05-15','yoghurt.jpg',4),(35,'Ketchup',80,70.00,35.00,'2026-05-31','ketchup.jpg',4);
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Consumer 2 (different district): Jane Doe
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('jane@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'consumer', 'Jane Doe', 'Ankara', 'Cankaya', TRUE);
+--
+-- Table structure for table `users`
+--
 
--- Consumer 3: Ali Koca
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('ali@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'consumer', 'Ali Koca', 'Ankara', 'Bilkent', TRUE);
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `role` enum('market','consumer') NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `district` varchar(50) NOT NULL,
+  `verification_code` varchar(10) DEFAULT NULL,
+  `is_verified` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Consumer 4: Hasan Kara
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('hasan@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'consumer', 'Hasan Kara', 'Ankara', 'Cankaya', TRUE);
+--
+-- Dumping data for table `users`
+--
 
--- Consumer 5: Daniel McDonald
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('daniel@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'consumer', 'Daniel McDonald', 'Ankara', 'Bilkent', TRUE);
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'tok-market@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','market','Tok Market','Ankara','Çankaya',NULL,1),(2,'bim-market@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','market','Bim Market','Ankara','Altındağ',NULL,1),(3,'file-market@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','market','File Market','Ankara','Çankaya',NULL,1),(4,'target-market@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','market','Target Market','Ankara','Çankaya',NULL,1),(17,'consumer@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','consumer','John Doe','Ankara','Çankaya',NULL,1),(18,'jane@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','consumer','Jane Doe','Ankara','Çankaya',NULL,1),(19,'ali@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','consumer','Ali Koca','Ankara','Çankaya',NULL,1),(20,'hasan@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','consumer','Hasan Kara','Ankara','Çankaya',NULL,1),(21,'daniel@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','consumer','Daniel McDonald','Ankara','Çankaya',NULL,1),(22,'kyra@gmail.com','$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC','consumer','Kyra Hopkins','Ankara','Çankaya',NULL,1),(25,'altay@gmail.com','$2b$10$ql7Fs3BFsG.bW7rx.aafIeD4eHoDh75ja/lepelWFiNteSBITuv1y','consumer','Altay','Ankara','Altındağ',NULL,1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
--- Consumer 6: Kyra Hopkins
-INSERT INTO users (email, password, role, name, city, district, is_verified) VALUES 
-('kyra@gmail.com', '$2b$10$dHBl9BdDBs7Y1wE7jP89L.oYi8Q8kH/JwxEl2sP8n7noIiObQs.DC', 'consumer', 'Kyra Hopkins', 'Ankara', 'Cankaya', TRUE);
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Products (market user has id=1) Tok
-INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Toblerone 100gr', 25, 200.00, 120.00, DATE_ADD(CURDATE(), INTERVAL 3 MONTH), 'toblerone.jpg', 1),
-('Magnum Ice Cream', 50, 45.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 'magnum.jpg', 1),
-('Magnolia Cake', 8, 150.00, 80.00, DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'magnolia.jpg', 1),
-('Nutmeg Spice', 100, 50.00, 20.00, DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'nutmeg.jpg', 1);
-
--- Products (market user has id=2) Bim
-INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Milk 1L', 5, 30.00, 10.00, DATE_ADD(CURDATE(), INTERVAL 4 DAY), 'milk.jpg', 2),
-('Banana 1kg', 40, 60.00, 35.00, DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'banana.jpg', 2),
-('Apple 1kg', 60, 50.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'apple.jpg', 2),
-('Cheese', 15, 120.00, 85.00, DATE_ADD(CURDATE(), INTERVAL 15 DAY), 'cheese.jpg', 2);
-
--- Products (market user has id=3) File 
-INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Tomato 1kg', 30, 40.00, 20.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'tomato.jpg', 3),
-('Cucumber 1kg', 70, 35.00, 18.00, DATE_ADD(CURDATE(), INTERVAL 4 DAY), 'cucumber.jpg', 3),
-('Orange Juice 1L', 45, 80.00, 55.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'orangejuice.jpg', 3),
-('Eggs (12 Pack)', 50, 110.00,75.00, DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 'eggs.jpg', 3),
-('Mustard', 35, 70.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'mustard.jpg', 3),
-('Olive Oil',60, 250.00, 130.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'oliveoil.jpg', 3),
-('Sunscreen', 90, 500.00, 280.00, DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'sunscreen.jpg', 3),
-('Soap', 100, 75.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 'soap.jpg', 3),
-('Toothpaste', 60 , 120.00, 75.00, DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'toothpaste.jpg', 3);
-
--- Products (market user has id=4) Target 
-INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Nutella', 30, 200.00, 120.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'nutella.jpg', 4),
-('Toast Bread', 60, 65.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'toast.jpg', 4),
-('Yoghurt', 25, 60.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'yoghurt.jpg', 4),
-('Ketchup', 80, 70.00, 35.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'ketchup.jpg', 4),
-('Frozen Pizza', 100, 220.00, 180.00, DATE_ADD(CURDATE(), INTERVAL 2 MONTH), 'pizza.jpg', 4),
-('Meat', 25, 800.00, 650.00, DATE_ADD(CURDATE(), INTERVAL 2 DAY), 'meat.jpg', 4),
-('Ranch', 100, 65.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 'ranch.jpg', 4),
-('Cilantro', 40, 30.00, 18.00, DATE_ADD(CURDATE(), INTERVAL 4 DAY), 'cilantro.jpg', 4),
-('Eggplant', 50, 80.00, 55.00, DATE_ADD(CURDATE(), INTERVAL 6 DAY), 'eggplant.jpg', 4);
+-- Dump completed on 2026-05-08 17:23:39
