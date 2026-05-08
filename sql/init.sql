@@ -81,38 +81,38 @@ INSERT INTO users (email, password, role, name, city, district, is_verified) VAL
 
 -- Products (market user has id=1) Tok
 INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Toblerone 100gr', 25, 200.00, 120.00, DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 'toblerone.jpg', 1),
-('Magnum Ice Cream', 50, 45.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 2 DAY), 'magnum.jpg', 1),
-('Magnolia Cake', 10, 150.00, 80.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'magnolia.jpg', 1),
-('Nutmeg Spice', 100, 50.00, 20.00, DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 'nutmeg.jpg', 1);
+('Toblerone 100gr', 25, 200.00, 120.00, DATE_ADD(CURDATE(), INTERVAL 3 MONTH), 'toblerone.jpg', 1),
+('Magnum Ice Cream', 50, 45.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 'magnum.jpg', 1),
+('Magnolia Cake', 8, 150.00, 80.00, DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'magnolia.jpg', 1),
+('Nutmeg Spice', 100, 50.00, 20.00, DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'nutmeg.jpg', 1);
 
 -- Products (market user has id=2) Bim
 INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Milk 1L', 5, 30.00, 10.00, DATE_SUB(CURDATE(), INTERVAL 2 DAY), 'milk.jpg', 2),
-('Banana 1kg', 40, 60.00, 35.00, DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'banana.jpg', 2),
-('Apple 1kg', 60, 50.00, 30.00, DATE_SUB(CURDATE(), INTERVAL 15 DAY), 'apple.jpg', 2),
-('Cheese', 15, 120.00, 85.00, DATE_SUB(CURDATE(), INTERVAL 2 MONTH), 'cheese.jpg', 2);
+('Milk 1L', 5, 30.00, 10.00, DATE_ADD(CURDATE(), INTERVAL 4 DAY), 'milk.jpg', 2),
+('Banana 1kg', 40, 60.00, 35.00, DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'banana.jpg', 2),
+('Apple 1kg', 60, 50.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 3 DAY), 'apple.jpg', 2),
+('Cheese', 15, 120.00, 85.00, DATE_ADD(CURDATE(), INTERVAL 15 DAY), 'cheese.jpg', 2);
 
 -- Products (market user has id=3) File 
 INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Tomato 1kg', 30, 40.00, 20.00, DATE_SUB(CURDATE(), INTERVAL 12 DAY), 'tomato.jpg', 3),
-('Cucumber 1kg', 70, 35.00, 18.00, DATE_SUB(CURDATE(), INTERVAL 8 DAY), 'cucumber.jpg', 3),
-('Orange Juice 1L', 45, 80.00, 55.00, DATE_SUB(CURDATE(), INTERVAL 8 DAY), 'orangejuice.jpg', 3),
-('Eggs (12 Pack)', 50, 110.00,75.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'eggs.jpg', 3),
-('Mustard', 35, 70.00, 30.00, DATE_SUB(CURDATE(), INTERVAL 25 DAY), 'mustard.jpg', 3),
-('Olive Oil',60, 250.00, 130.00, DATE_SUB(CURDATE(), INTERVAL 3 MONTH), 'oliveoil.jpg', 3),
-('Sunscreen', 90, 500.00, 280.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'sunscreen.jpg', 3),
-('Soap', 100, 75.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 6 MONTH), 'soap.jpg', 3),
-('Toothpaste', 60 , 120.00, 75.00, DATE_SUB(CURDATE(), INTERVAL 20 DAY), 'toothpaste.jpg', 3);
+('Tomato 1kg', 30, 40.00, 20.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'tomato.jpg', 3),
+('Cucumber 1kg', 70, 35.00, 18.00, DATE_ADD(CURDATE(), INTERVAL 4 DAY), 'cucumber.jpg', 3),
+('Orange Juice 1L', 45, 80.00, 55.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'orangejuice.jpg', 3),
+('Eggs (12 Pack)', 50, 110.00,75.00, DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 'eggs.jpg', 3),
+('Mustard', 35, 70.00, 30.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'mustard.jpg', 3),
+('Olive Oil',60, 250.00, 130.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'oliveoil.jpg', 3),
+('Sunscreen', 90, 500.00, 280.00, DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'sunscreen.jpg', 3),
+('Soap', 100, 75.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 'soap.jpg', 3),
+('Toothpaste', 60 , 120.00, 75.00, DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'toothpaste.jpg', 3);
 
 -- Products (market user has id=4) Target 
 INSERT INTO products (title, stock, normal_price, discounted_price, expiration_date, image_filename, market_id) VALUES 
-('Nutella', 30, 200.00, 120.00, DATE_SUB(CURDATE(), INTERVAL 25 DAY), 'nutella.jpg', 4),
-('Toast Bread', 60, 65.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'toast.jpg', 4),
-('Yoghurt', 25, 60.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'yoghurt.jpg', 4),
-('Ketchup', 80, 70.00, 35.00, DATE_SUB(CURDATE(), INTERVAL 2 MONTH), 'ketchup.jpg', 4),
-('Frozen Pizza', 100, 220.00, 180.00, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 'pizza.jpg', 4),
-('Meat', 25, 800.00, 650.00, DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'meat.jpg', 4),
-('Ranch', 100, 65.00, 40.00, DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'ranch.jpg', 4),
-('Cilantro', 40, 30.00, 18.00, DATE_SUB(CURDATE(), INTERVAL 7 DAY), 'cilantro.jpg', 4),
-('Eggplant', 50, 80.00, 55.00, DATE_SUB(CURDATE(), INTERVAL 9 DAY), 'eggplant.jpg', 4);
+('Nutella', 30, 200.00, 120.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'nutella.jpg', 4),
+('Toast Bread', 60, 65.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'toast.jpg', 4),
+('Yoghurt', 25, 60.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 5 DAY), 'yoghurt.jpg', 4),
+('Ketchup', 80, 70.00, 35.00, DATE_ADD(CURDATE(), INTERVAL 5 MONTH), 'ketchup.jpg', 4),
+('Frozen Pizza', 100, 220.00, 180.00, DATE_ADD(CURDATE(), INTERVAL 2 MONTH), 'pizza.jpg', 4),
+('Meat', 25, 800.00, 650.00, DATE_ADD(CURDATE(), INTERVAL 2 DAY), 'meat.jpg', 4),
+('Ranch', 100, 65.00, 40.00, DATE_ADD(CURDATE(), INTERVAL 1 WEEK), 'ranch.jpg', 4),
+('Cilantro', 40, 30.00, 18.00, DATE_ADD(CURDATE(), INTERVAL 4 DAY), 'cilantro.jpg', 4),
+('Eggplant', 50, 80.00, 55.00, DATE_ADD(CURDATE(), INTERVAL 6 DAY), 'eggplant.jpg', 4);

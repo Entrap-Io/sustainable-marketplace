@@ -34,17 +34,20 @@
     <div class="row mb-3">
       <div class="col">
         <label>City</label>
-        <input type="text" name="city" class="form-control <%= errors.city ? 'is-invalid' : '' %>" value="<%= data?.city ?? '' %>">
-
+        <select name="city" class="form-select <%= errors.city ? 'is-invalid' : '' %>" data-current="<%= data?.city ?? '' %>" required>
+          <option value="">Loading Cities...</option>
+        </select>
         <% if(errors.city) { %><div class="invalid-feedback"><%= errors.city.msg %></div><% } %>
       </div>
       <div class="col">
         <label>District</label>
-        <input type="text" name="district" class="form-control <%= errors.district ? 'is-invalid' : '' %>" value="<%= data?.district ?? '' %>">
-
+        <select name="district" class="form-select <%= errors.district ? 'is-invalid' : '' %>" data-current="<%= data?.district ?? '' %>" required>
+          <option value="">Select District</option>
+        </select>
         <% if(errors.district) { %><div class="invalid-feedback"><%= errors.district.msg %></div><% } %>
       </div>
     </div>
+    <script src="/js/geo-selector.js"></script>
     <button type="submit" class="btn btn-primary w-100">Register</button>
   </form>
   <p class="mt-3 text-center">Already have an account? <a href="/auth/login">Login</a></p>

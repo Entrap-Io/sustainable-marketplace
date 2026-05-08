@@ -1,64 +1,128 @@
 <%- include('../partials/header', { title: 'Consumer Dashboard' }) %>
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2> Search Products in <%= user.city %> ,
-
-      <% if (selectedDistrict !== 'ALL') { %> 
-        - <%= selectedDistrict %>
-      <% } %>
-    </h2>
-    <a href="/consumer/profile" class="btn btn-secondary">Profile Settings</a>
+<div class="container mt-4">
+  <div class="mb-4">
+    <h2 class="fw-bold mb-1">Deals in <%= scope === 'city' ? cityName : districtName %></h2>
+    <p class="text-muted">Save money, reduce waste.</p>
   </div>
 
-  <form action="/consumer/dashboard" method="GET" class="mb-4">
-    <div class="input-group">
-      <input type="text" name="keyword" class="form-control" placeholder="Search by product title..." value="<%= keyword %>">
-      <div class="alert alert-info">
-        Showing products in <strong><%= user.city %> / <%= user.district %></strong>
+  <!-- Scope Toggle -->
+  <div class="mb-4 scope-toggle">
+    <div class="row g-2">
+      <div class="col-6">
+        <a href="/consumer/dashboard?scope=district&keyword=<%= keyword %>&sort=<%= sort %>" 
+           class="btn w-100 <%= scope === 'district' ? 'btn-primary' : 'btn-outline-primary border-0 bg-white shadow-sm' %>">
+          <i class="bi bi-geo-alt-fill me-1"></i> <%= districtName %> Only
+        </a>
       </div>
+      <div class="col-6">
+        <a href="/consumer/dashboard?scope=city&keyword=<%= keyword %>&sort=<%= sort %>" 
+           class="btn w-100 <%= scope === 'city' ? 'btn-primary' : 'btn-outline-primary border-0 bg-white shadow-sm' %>">
+          <i class="bi bi-building me-1"></i> All of <%= cityName %>
+        </a>
       </div>
+    </div>
+  </div>
 
-      <button type="submit" class="btn btn-primary">Search</button>
-      <a href="/consumer/dashboard" class="btn btn-outline-secondary">Clear</a>
+  <!-- Search and Sort Row -->
+  <form action="/consumer/dashboard" method="GET" class="mb-5">
+    <input type="hidden" name="scope" value="<%= scope %>">
+    <div class="row g-3 align-items-center">
+      <div class="col-lg-7 col-md-6">
+        <div class="input-group shadow-sm rounded">
+          <input type="text" name="keyword" class="form-control border-0 py-2 ps-3" placeholder="What are you looking for?" value="<%= keyword %>">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="bi bi-search me-1"></i> Search
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex align-items-center bg-white shadow-sm rounded px-2">
+          <i class="bi bi-sort-down ms-2 text-muted"></i>
+          <select name="sort" class="form-select border-0 bg-transparent py-2" onchange="this.form.submit()">
+            <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest First</option>
+            <option value="price_asc" <%= sort === 'price_asc' ? 'selected' : '' %>>Price: Low to High</option>
+            <option value="price_desc" <%= sort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
+            <option value="expiry_soon" <%= sort === 'expiry_soon' ? 'selected' : '' %>>Expiry: Soonest</option>
+            <option value="discount_high" <%= sort === 'discount_high' ? 'selected' : '' %>>Highest Discount</option>
+            <option value="name_asc" <%= sort === 'name_asc' ? 'selected' : '' %>>Name: A-Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-2 text-center text-md-end">
+        <a href="/consumer/dashboard?scope=<%= scope %>" class="text-muted small text-decoration-none">
+          <i class="bi bi-arrow-counterclockwise"></i> Reset
+        </a>
+      </div>
     </div>
   </form>
 
   <div class="row">
     <% if (products.length === 0) { %>
-      <div class="col-12"><div class="alert alert-info">No products found.</div></div>
+      <div class="col-12 py-5 text-center">
+        <div class="glass-panel d-inline-block">
+          <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+          <h4>No results found</h4>
+          <p class="text-muted mb-0">Try adjusting your filters or search keywords.</p>
+        </div>
+      </div>
     <% } else { %>
       <% products.forEach(product => { %>
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 shadow-sm">
-            <img src="/uploads/<%= product.image_filename %>" class="card-img-top" alt="<%= product.title %>" style="height: 150px; object-fit: cover;">
-            <div class="card-body">
-              <h6 class="card-title"><%= product.title %></h6>
-              <p class="card-text small text-muted mb-1"><i class="bi bi-shop"></i> <%= product.market_name %> (<%= product.market_district %>)</p>
-
+        <div class="col-xl-3 col-lg-4 col-sm-6 mb-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="position-relative">
+              <img src="/uploads/<%= product.image_filename %>" class="card-img-top" alt="<%= product.title %>" style="height: 180px; object-fit: cover;">
               <%
                 const discountPercent = Math.round(
                    ((product.normal_price - product.discounted_price) / product.normal_price) * 100
                 );
               %>
-              <p class="card-text mb-2">
-                <del class="text-muted"><%= product.normal_price %> TL</del> 
-                <strong class="text-success fs-5 ms-2"><%= product.discounted_price %> TL</strong>
+              <div class="position-absolute top-0 start-0 m-2">
+                <span class="badge bg-danger rounded-pill shadow-sm">
+                   -<%= discountPercent %>% OFF
+                </span>
+              </div>
+            </div>
+            
+            <div class="card-body d-flex flex-column">
+              <h6 class="card-title fw-bold mb-1 text-truncate-2" style="height: 2.4em;"><%= product.title %></h6>
+              
+              <p class="card-text small text-muted mb-3">
+                <i class="bi bi-shop text-success me-1"></i> <%= product.market_name %> (<%= product.market_district %>)
               </p>
 
-              <span class="badge bg-success">
-                 -<%= discountPercent %>%
-              </span>
-              <p class="card-text small mb-2 text-danger">Expires: <%= new Date(product.expiration_date).toLocaleDateString() %></p>
-              <p class="card-text small text-warning">
-                <% if (product.days_left > 0) { %>
-                  <strong><%= product.days_left %> days left</strong>
-                <% } else { %>
-                  <strong>Expires today</strong>
-                <% } %>
-              </p>
+              <div class="mt-auto">
+                <div class="mb-3">
+                  <div class="d-flex align-items-baseline gap-2">
+                    <span class="price-hero fs-4"><%= product.discounted_price %> TL</span>
+                    <del class="text-muted small"><%= product.normal_price %> TL</del>
+                  </div>
+                </div>
+                
+                <div class="d-flex flex-column gap-1 small">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted"><i class="bi bi-calendar-event me-1"></i> Expires:</span>
+                    <span class="<%= product.days_left <= 2 ? 'text-danger fw-bold' : 'text-dark' %>">
+                      <%= new Date(product.expiration_date).toLocaleDateString() %>
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted"><i class="bi bi-hourglass-split me-1"></i> Status:</span>
+                    <span class="badge <%= product.days_left <= 2 ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-dark' %> border-0">
+                      <% if (product.days_left > 0) { %>
+                        <%= product.days_left %> days left
+                      <% } else { %>
+                        Expires today!
+                      <% } %>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card-footer bg-transparent p-2">
-              <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" data-id="<%= product.id %>">Add to Cart</button>
+            
+            <div class="card-footer bg-white border-0 p-3 pt-0">
+              <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 add-to-cart-btn" data-id="<%= product.id %>">
+                <i class="bi bi-cart-plus-fill fs-5"></i> Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -66,12 +130,15 @@
     <% } %>
   </div>
 
+  <!-- Pagination -->
   <% if (totalPages > 1) { %>
-    <nav aria-label="Page navigation" class="mt-4">
+    <nav class="mt-5 mb-5">
       <ul class="pagination justify-content-center">
         <% for(let i=1; i<=totalPages; i++) { %>
-          <li class="page-item <%= page === i ? 'active' : '' %>">
-            <a class="page-link" href="/consumer/dashboard?page=<%= i %>"><%= i %></a>
+          <li class="page-item mx-1 <%= page === i ? 'active' : '' %>">
+            <a class="page-link rounded-circle border-0 shadow-sm" href="/consumer/dashboard?page=<%= i %>&scope=<%= scope %>&keyword=<%= keyword %>&sort=<%= sort %>" style="width: 40px; height: 40px; line-height: 24px; text-align: center;">
+              <%= i %>
+            </a>
           </li>
         <% } %>
       </ul>
@@ -80,29 +147,43 @@
   
 </div>
 
-<!-- Toast for Add to Cart -->
+<!-- Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">Added to cart successfully!</div>
-
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  <div id="cartToast" class="toast align-items-center text-bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex p-2">
+      <i class="bi bi-check-circle-fill me-2 ms-1"></i>
+      <div class="toast-body fw-medium">Item added to your basket!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/cart/count").then(r => r.json()).then(data => {
-    document.getElementById("cart-count").innerText = data.count > 0 ? data.count : "";
-  });
+  const updateCartCount = () => {
+    fetch("/cart/count").then(r => r.json()).then(data => {
+      const countEl = document.getElementById("cart-count");
+      if (countEl) {
+        countEl.innerText = data.count > 0 ? data.count : "";
+        countEl.style.display = data.count > 0 ? "block" : "none";
+      }
+    });
+  };
+  
+  updateCartCount();
 
   const toastEl = document.getElementById("cartToast");
-  const toast = new bootstrap.Toast(toastEl);
+  const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
 
   document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const productId = btn.getAttribute("data-id");
+      
+      // Visual feedback
+      const originalContent = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Adding...';
+      btn.disabled = true;
+
       fetch("/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,12 +191,16 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then(r => r.json())
       .then(res => {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
         if (res.success) {
           toast.show();
-          let countEl = document.getElementById("cart-count");
-          let currentCount = parseInt(countEl.innerText || 0);
-          countEl.innerText = currentCount + 1;
+          updateCartCount();
         }
+      })
+      .catch(() => {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
       });
     });
   });
