@@ -51,11 +51,10 @@
                 class="card h-100 shadow-sm border-0 position-relative overflow-hidden <%= product.is_expired ? 'bg-light' : '' %>">
                 <div class="row g-0 h-100">
                   <div class="col-4 position-relative">
-                    <img src="/uploads/<%= product.image_filename %>" class="img-fluid h-100 w-100"
-                      alt="<%= product.title %>" style="object-fit: cover; min-height: 180px;">
+                    <img src="/uploads/<%= product.image_filename %>" class="img-fluid h-100 w-100" alt="<%= product.title %>" style="object-fit: cover; min-height: 180px;">
                     <div class="position-absolute top-0 end-0 m-2">
-                      <span class="badge <%= product.stock < 5 ? 'bg-danger' : 'bg-dark' %> shadow-sm">
-                        <%= product.stock %> in stock
+                      <span class="badge <%= product.stock <= 0 ? 'bg-danger' : (product.stock < 5 ? 'bg-warning text-dark' : 'bg-dark') %> shadow-sm">
+                        <%= product.stock <= 0 ? 'SOLD OUT' : product.stock + ' in stock' %>
                       </span>
                     </div>
                     <% if (product.is_expired) { %>

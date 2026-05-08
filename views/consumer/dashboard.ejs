@@ -1,7 +1,7 @@
 <%- include('../partials/header', { title: 'Consumer Dashboard' }) %>
 <div class="container mt-4">
   <div class="mb-4">
-    <h2 class="fw-bold mb-1">Deals in <%= scope === 'city' ? cityName : districtName %></h2>
+    <h2 class="fw-bold mb-1">Deals in <%= searchScope === 'city' ? cityName : districtName %></h2>
     <p class="text-muted">Save money, reduce waste.</p>
   </div>
 
@@ -9,14 +9,14 @@
   <div class="mb-4 toggle">
     <div class="row g-2">
       <div class="col-6">
-        <a href="/consumer/dashboard?scope=district&keyword=<%= keyword %>&sort=<%= sort %>" 
-           class="btn w-100 <%= scope === 'district' ? 'btn-primary' : 'btn-outline-primary border-0 bg-white shadow-sm' %>">
+        <a href="/consumer/dashboard?searchScope=district&keyword=<%= keyword %>&sort=<%= sort %>" 
+           class="btn w-100 <%= searchScope === 'district' ? 'btn-primary' : 'btn-outline-primary border-0 bg-white shadow-sm' %>">
           <i class="bi bi-geo-alt-fill me-1"></i> <%= districtName %> Only
         </a>
       </div>
       <div class="col-6">
-        <a href="/consumer/dashboard?scope=city&keyword=<%= keyword %>&sort=<%= sort %>" 
-           class="btn w-100 <%= scope === 'city' ? 'btn-primary' : 'btn-outline-primary border-0 bg-white shadow-sm' %>">
+        <a href="/consumer/dashboard?searchScope=city&keyword=<%= keyword %>&sort=<%= sort %>" 
+           class="btn w-100 <%= searchScope === 'city' ? 'btn-primary' : 'btn-outline-primary border-0 bg-white shadow-sm' %>">
           <i class="bi bi-building me-1"></i> All of <%= cityName %>
         </a>
       </div>
@@ -25,7 +25,7 @@
 
   <!-- Search and Sort Row -->
   <form action="/consumer/dashboard" method="GET" class="mb-5">
-    <input type="hidden" name="scope" value="<%= scope %>">
+    <input type="hidden" name="searchScope" value="<%= searchScope %>">
     <div class="row g-3 align-items-center">
       <div class="col-lg-7 col-md-6">
         <div class="input-group shadow-sm rounded">
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="col-lg-2 col-md-2 text-center text-md-end">
-        <a href="/consumer/dashboard?scope=<%= scope %>" class="text-muted small text-decoration-none">
+        <a href="/consumer/dashboard?searchScope=<%= searchScope %>" class="text-muted small text-decoration-none">
           <i class="bi bi-arrow-counterclockwise"></i> Reset
         </a>
       </div>
@@ -136,7 +136,7 @@
       <ul class="pagination justify-content-center">
         <% for(let i=1; i<=totalPages; i++) { %>
           <li class="page-item mx-1 <%= page === i ? 'active' : '' %>">
-            <a class="page-link rounded-circle border-0 shadow-sm" href="/consumer/dashboard?page=<%= i %>&scope=<%= scope %>&keyword=<%= keyword %>&sort=<%= sort %>" style="width: 40px; height: 40px; line-height: 24px; text-align: center;">
+            <a class="page-link rounded-circle border-0 shadow-sm" href="/consumer/dashboard?page=<%= i %>&searchScope=<%= searchScope %>&keyword=<%= keyword %>&sort=<%= sort %>" style="width: 40px; height: 40px; line-height: 24px; text-align: center;">
               <%= i %>
             </a>
           </li>
@@ -152,7 +152,7 @@
   <div id="cartToast" class="toast align-items-center text-bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex p-2">
       <i class="bi bi-check-circle-fill me-2 ms-1"></i>
-      <div class="toast-body fw-medium">Item added to your basket!</div>
+      <div class="toast-body fw-medium" id="toast-msg">Item added to your basket!</div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
@@ -173,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 
   const toastEl = document.getElementById("cartToast");
+  const toastMsg = document.getElementById("toast-msg");
   const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
 
   document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
@@ -194,8 +195,14 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.innerHTML = originalContent;
         btn.disabled = false;
         if (res.success) {
+          toastEl.classList.replace("text-bg-danger", "text-bg-success");
+          toastMsg.innerText = "Item added to your basket!";
           toast.show();
           updateCartCount();
+        } else {
+          toastEl.classList.replace("text-bg-success", "text-bg-danger");
+          toastMsg.innerText = res.error || "Could not add item.";
+          toast.show();
         }
       })
       .catch(() => {

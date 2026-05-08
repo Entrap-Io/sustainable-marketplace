@@ -3,7 +3,7 @@ import db from "../db.js";
 export const dashboard = async (req, res) => {
   const keyword = req.query.keyword || "";
   const page = parseInt(req.query.page) || 1;
-  const scope = req.query.scope || "district";
+  const searchScope = req.query.searchScope || "district";
   const sort = req.query.sort || "newest";
   const limit = 4;
   const offset = (page - 1) * limit;
@@ -12,8 +12,8 @@ export const dashboard = async (req, res) => {
     const userCity = req.session.user.city;
     const userDistrict = req.session.user.district;
 
-    let filterField = scope === "city" ? "u.city" : "u.district";
-    let filterValue = scope === "city" ? userCity : userDistrict;
+    let filterField = searchScope === "city" ? "u.city" : "u.district";
+    let filterValue = searchScope === "city" ? userCity : userDistrict;
 
     let orderBy = "p.id DESC";
     switch(sort) {
@@ -38,7 +38,7 @@ export const dashboard = async (req, res) => {
     }
 
     // Prioritize district only when searching (keyword present) and in "Whole City" scope
-    if (keyword && scope === "city") {
+    if (keyword && searchScope === "city") {
       query += ` ORDER BY (u.district = ?) DESC, ${orderBy} LIMIT ? OFFSET ?`;
       queryParams.push(userDistrict, limit, offset);
     } else {
@@ -70,7 +70,7 @@ export const dashboard = async (req, res) => {
         keyword, 
         page, 
         totalPages, 
-        scope,
+        searchScope,
         sort,
         cityName: userCity,
         districtName: userDistrict

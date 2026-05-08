@@ -109,20 +109,40 @@ document.addEventListener("DOMContentLoaded", () => {
             else qtyEl.innerText = newQty;
           }
           updateGrandTotal();
+        } else if (res.error) {
+          toastEl.classList.replace("text-bg-success", "text-bg-danger");
+          toastMsg.innerText = res.error;
+          toast.show();
         }
       });
     });
   });
 
   document.getElementById("purchase-btn").addEventListener("click", () => {
+    const btn = document.getElementById("purchase-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+
     fetch("/cart/purchase", { method: "POST" })
     .then(r => r.json())
     .then(res => {
       if (res.success) {
-        document.getElementById("cart-list").innerHTML = '<div class="alert alert-success">Purchase successful! Your items will be ready for pickup.</div>';
-        updateGrandTotal();
+        document.getElementById("cart-list").innerHTML = '<div class="alert alert-success py-4 text-center"><h4>Purchase successful!</h4><p>Your items are reserved and ready for pickup.</p><a href="/consumer/dashboard" class="btn btn-primary mt-2">Back to Shop</a></div>';
+        document.getElementById("purchase-btn").closest(".card").remove();
+        document.getElementById("cart-count").innerText = "";
+        toastEl.classList.replace("text-bg-danger", "text-bg-success");
         toastMsg.innerText = "Purchase completed successfully!";
         toast.show();
+      } else if (res.adjusted) {
+        // Reload to show new quantities/removals
+        alert(res.message + "\n\n" + res.details.join("\n"));
+        location.reload();
+      } else {
+        toastEl.classList.replace("text-bg-success", "text-bg-danger");
+        toastMsg.innerText = res.error || "Purchase failed.";
+        toast.show();
+        btn.disabled = false;
+        btn.innerHTML = "PURCHASE";
       }
     });
   });

@@ -1,6 +1,7 @@
 import db from "../db.js";
 import multer from "multer";
 import path from "path";
+import fs from "fs/promises";
 import { validationResult } from "express-validator";
 
 const storage = multer.diskStorage({
@@ -124,6 +125,16 @@ export const editProduct = async (req, res) => {
   
   try {
     if (req.file) {
+      // Delete old image if it exists
+      const [rows] = await db.query("SELECT image_filename FROM products WHERE id=? AND market_id=?", [req.params.id, req.session.user.id]);
+      if (rows.length > 0 && rows[0].image_filename !== 'default.png') {
+        try {
+          await fs.unlink(path.join("public/uploads/", rows[0].image_filename));
+        } catch (err) {
+          console.error("Old file delete failed:", err);
+        }
+      }
+
       await db.query(
         `UPDATE products SET title=?, stock=?, normal_price=?, discounted_price=?, expiration_date=?, image_filename=? 
         WHERE id=? AND market_id=?`,
@@ -145,6 +156,16 @@ export const editProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
+    const [rows] = await db.query("SELECT image_filename FROM products WHERE id=? AND market_id=?", [req.params.id, req.session.user.id]);
+    
+    if (rows.length > 0 && rows[0].image_filename !== 'default.png') {
+      try {
+        await fs.unlink(path.join("public/uploads/", rows[0].image_filename));
+      } catch (err) {
+        console.error("File delete failed:", err);
+      }
+    }
+
     await db.query(`DELETE FROM products WHERE id=? 
                    AND market_id=?`, [req.params.id, req.session.user.id]);
     res.redirect("/market/dashboard");
